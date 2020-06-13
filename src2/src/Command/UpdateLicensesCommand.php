@@ -394,7 +394,7 @@ class UpdateLicensesCommand extends Command
         $report = $this->reporter->getReport();
 
         if (empty($report['fixed'])) {
-                continue;
+            return;
         }
         $style->text('Files with bad license headers:');
         $style->listing($report[$section]);
