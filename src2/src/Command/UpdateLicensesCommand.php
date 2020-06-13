@@ -134,7 +134,7 @@ class UpdateLicensesCommand extends Command
                 'dry-run',
                 null,
                 InputOption::VALUE_NONE,
-                false
+                'Dry-run mode does not modify files'
             );
     }
 
@@ -161,16 +161,16 @@ class UpdateLicensesCommand extends Command
             $this->findAndCheckExtension($input, $output, $extension);
         }
 
-        if ($this->displayReport) {
-            $this->printPrettyReport($input, $output);
-        }
-
         if ($this->runAsDry) {
+            $this->printDryRunPrettyReport($input, $output);
+
             if (empty($this->reporter->getReport()['fixed'])) {
                 return 0;
             } else {
                 return 1;
             }
+        } elseif ($this->displayReport) {
+            $this->printPrettyReport($input, $output);
         }
     }
 
@@ -384,5 +384,19 @@ class UpdateLicensesCommand extends Command
             $style->text(ucfirst($section) . ':');
             $style->listing($report[$section]);
         }
+    }
+
+    private function printDryRunPrettyReport(InputInterface $input, OutputInterface $output)
+    {
+        $style = new SymfonyStyle($input, $output);
+        $style->section('Header Stamp Dry Run Report');
+
+        $report = $this->reporter->getReport();
+
+        if (empty($report['fixed'])) {
+                continue;
+        }
+        $style->text('Files with bad license headers:');
+        $style->listing($report[$section]);
     }
 }
