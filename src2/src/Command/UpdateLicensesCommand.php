@@ -397,6 +397,6 @@ class UpdateLicensesCommand extends Command
             return;
         }
         $style->text('Files with bad license headers:');
-        $style->listing($report[$section]);
+        $style->listing($report['fixed']);
     }
 }
